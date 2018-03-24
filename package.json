@@ -1,6 +1,6 @@
 {
   "name": "visibl",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Teeny-tiny declarative in-viewport React HOC",
   "source": "index.js",
   "module": "dist/visibl.es.js",
