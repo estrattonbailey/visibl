@@ -1,0 +1,37 @@
+{
+  "name": "visibl",
+  "version": "0.0.1",
+  "description": "Teeny-tiny declarative in-viewport React HOC",
+  "source": "index.js",
+  "module": "dist/visibl.es.js",
+  "main": "dist/visibl.js",
+  "umd:main": "dist/visibl.umd.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "microbundle build --jsx React.createElement",
+    "watch": "microbundle watch --jsx React.createElement",
+    "publish": "npm publish"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/estrattonbailey/visibl",
+  "author": "estrattonbailey",
+  "keywords": [
+    "react",
+    "waypoint",
+    "in viewport"
+  ],
+  "devDependencies": {
+    "microbundle": "^0.4.4"
+  },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "srraf": "^2.0.0"
+  }
+}
