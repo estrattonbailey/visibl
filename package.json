@@ -32,6 +32,6 @@
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "srraf": "^2.0.0"
+    "srraf": "^2.0.1"
   }
 }
