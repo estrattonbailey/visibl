@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "microbundle build --jsx React.createElement",
-    "watch": "microbundle watch --jsx React.createElement",
+    "watch": "microbundle watch --jsx React.createElement --compress false",
     "publish": "npm publish"
   },
   "license": "MIT",
@@ -26,12 +26,12 @@
     "microbundle": "^0.4.4"
   },
   "peerDependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
   },
   "dependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
     "srraf": "^2.0.1"
   }
 }

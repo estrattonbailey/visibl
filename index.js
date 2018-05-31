@@ -1,6 +1,25 @@
 import React from 'react'
-import { findDOMNode } from 'react-dom'
 import srraf from 'srraf'
+
+function pick (src, pick) {
+  let keys = Object.keys(src)
+
+  let picked = {}
+  let rest = {}
+
+  for (let i = 0; i < keys.length; i++) {
+    if (pick.indexOf(keys[i]) > -1) {
+      picked[keys[i]] = src[keys[i]]
+    } else {
+      rest[keys[i]] = src[keys[i]]
+    }
+  }
+
+  return {
+    picked,
+    rest
+  }
+}
 
 /**
  * @param {HTMLElement} node
@@ -10,7 +29,7 @@ import srraf from 'srraf'
 function inViewport (node, threshold, y) {
   const nodeTop = node.getBoundingClientRect().top + y
   const nodeBot = nodeTop + node.offsetHeight
-  const offset = (threshold / 100) * window.innerHeight
+  const offset = threshold * window.innerHeight
   return (nodeBot >= y - offset) && (nodeTop <= (y + window.innerHeight) + offset)
 }
 
@@ -18,35 +37,57 @@ function inViewport (node, threshold, y) {
  * @param {number} threshold
  */
 export default function visibl (Component) {
-  return class Visibl extends React.Component {
+  class Visibl extends React.Component {
     constructor (props) {
       super(props)
 
-      this.state = {
-        visible: false
-      }
+      this.setConfig()
+
+      this.state = {}
+
+      this.ref = React.createRef()
+    }
+
+    setConfig () {
+      const { picked, rest } = pick(
+        Object.assign({}, this.props, {
+          threshold: this.props.threshold || 0
+        }),
+        [ 'threshold' ]
+      )
+
+      this.options = picked
+      this.rest = rest
+    }
+
+    update (y = window.pageYOffset) {
+      const visible = inViewport(this.ref.current, this.options.threshold, y)
+
+      visible && this.setState({ visible })
+
+      return visible
+    }
+
+    cleanup () {
+      this.scroller && this.scroller.destroy()
     }
 
     componentDidMount () {
-      this.ref = findDOMNode(this)
-
-      this.scroller = srraf(({ y }) => {
-        const visible = inViewport(this.ref, this.props.threshold || 0, y)
-
-        if (visible && !this.state.visible) {
-          this.setState({ visible: true })
-        } else if (!visible && this.state.visible) {
-          this.setState({ visible: false })
-        }
-      }).update()
+      if (!this.update()) {
+        this.scroller = srraf(({ y }) => {
+          if (this.update(y)) this.cleanup()
+        }).update()
+      }
     }
 
     componentWillUnmount () {
-      if (this.scroller) this.scroller.destroy()
+      this.cleanup()
     }
 
     render () {
-      return <Component {...this.props} {...this.state} />
+      return <Component ref={this.ref} {...this.rest} {...this.state} />
     }
   }
+
+  return Visibl
 }

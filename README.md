@@ -1,70 +1,34 @@
 # visibl
-1kb declarative in-viewport React HOC.
+In-viewport detection via React HOC.
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](http://standardjs.com)
-
-## Features
-1. Uses [srraf](https://github.com/estrattonbailey/srraf) for performant scrolling and resizing using `requestAnimationFrame`
-2. Supports server environments and SSR
-3. Sooper small 😎
-
-## Usage
-Use visibl with child functions, or with components.
+# Usage
 ```javascript
-import Visibl from 'visibl'
+import React from 'react'
+import { render } from 'react-dom'
+import visibl from 'visibl'
 
-/**
- * Child function
- */
-const MyComp = props => (
-  <Visibl>
-    {(visible) => (
-      <h1>I am {visible ? 'visible.' : 'not visible.'}</h1>
-    )}
-  </Visibl>
-)
+const Component = React.forwardRef((props, ref) => {
+  return (
+    <h1 ref={ref}>I am {props.visible ? 'visible :)' : 'not visible :('}</h1>
+  )
+})
 
-/**
- * Child function
- */
-const Heading = ({ visible }) => (
-  <h1>I am {visible ? 'visible.' : 'not visible.'}</h1>
-)
-const MyComp = props => (
-  <Visibl>
-    <Heading/>
-  </Visibl>
-)
+const TrackedComponent = visibl(Component)
+
+function App () {
+  return (
+    <TrackedComponent />
+  )
+}
+
+render(<App />, document.body)
 ```
 
-## API
-Visibl only accepts a single parameter, `threshold`.
-
-### threshold
-Threshold is the percent-of-viewport value above or below the viewport that `visible` is triggered. Positive values will fire sooner, negative values will fire later. In the example below, `visible` will be triggered 50% of the viewport *before* the element is actually visible.
-```javascript
-<Visibl threshold={50}>
-  <Heading/>
-</Visibl>
+### Adjusting Threshold
+A fraction of the viewport height. Positive values makes image load sooner, negative values makes image load later.
+```
+<TrackedComponent threshold={0.2} />
 ```
 
-## Notes
-Visibl only supports watching vertical scroll events and window resize events. Horizontal scroll is outside its scope.
-
-## Browser Support
-TODO, but should work in all evergreen browsers and IE 10+.
-
-## Example
-To run the example, clone this repo, then:
-```bash
-# move into example dir
-cd relaze/example
-# install deps
-npm i
-# compile JS
-npm run js:build # or js:watch
-# serve index.html and update with changes
-live-server 
-```
-
-MIT License
+## License
+MIT License © [Eric Bailey](https://estrattonbailey.com)
